@@ -1,12 +1,15 @@
 export function start(canvasEl) {
   const w = canvasEl.width
   const h = canvasEl.height
+  const numBugs = 50
+
+  const localDistance = 1
 
   let ctx = canvasEl.getContext('2d');
 
   const swarm = []
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < numBugs; i++) {
     swarm.push({
       x: Math.random() * w,
       y: Math.random() * h,
@@ -17,9 +20,30 @@ export function start(canvasEl) {
 
   tick()
 
+  function separation(bug) {
+    const me = bug
+    bug.fx = 0
+    bug.fy = 0
+
+    for (const i in swarm) {
+      const them = swarm[i]
+      const distance = Math.sqrt( Math.pow(them.x - me.x, 2) + Math.pow(them.y - me.y, 2) )
+
+      if (distance < localDistance) {
+        //me.close = true
+      }
+    }
+  }
+
   function move(bug) {
-    bug.x = (bug.x + bug.ax) % w
-    bug.y = (bug.y + bug.ay) % h
+    separation(bug)
+
+    //bug.ax += bug.fx
+    //bug.ay += bug.fy
+
+    bug.x = (bug.x + bug.ax)
+    bug.y = (bug.y + bug.ay)
+
     wrap(bug)
   }
 
@@ -41,6 +65,9 @@ export function start(canvasEl) {
     ctx.save()
     ctx.beginPath()
     ctx.fillStyle = "white"
+    if (bug.close) {
+      ctx.fillStyle = "red"
+    }
     ctx.arc(bug.x, bug.y, 3, 0, Math.PI * 2, true)
     ctx.fill()
     ctx.restore()

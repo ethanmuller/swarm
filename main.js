@@ -4,7 +4,7 @@ import { start } from './animation-loop.js'
 
 document.querySelector('#app').innerHTML = `
   <div>
-    <canvas id="screen" width="114" height="64"></canvas>
+    <canvas id="screen" width="228" height="128"></canvas>
   </div>
 `
 
