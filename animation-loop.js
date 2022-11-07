@@ -1,19 +1,57 @@
 export function start(canvasEl) {
+  const w = canvasEl.width
+  const h = canvasEl.height
+
   let ctx = canvasEl.getContext('2d');
-  let x = 15
-  let y = 10
+
+  const swarm = []
+
+  for (let i = 0; i < 10; i++) {
+    swarm.push({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      ax: Math.random() * 2 - 1,
+      ay: Math.random() * 2 - 1,
+    })
+  }
+
   tick()
 
-  function tick() {
-    ctx.clearRect(0,0, 64,64)
+  function move(bug) {
+    bug.x = (bug.x + bug.ax) % w
+    bug.y = (bug.y + bug.ay) % h
+    wrap(bug)
+  }
+
+  function wrap(bug) {
+    if (bug.x > w) {
+      bug.x = 0
+    } else if (bug.x < 0) {
+      bug.x = w
+    }
+
+    if (bug.y > h) {
+      bug.y = 0
+    } else if (bug.y < 0) {
+      bug.y = h
+    }
+  }
+
+  function draw(bug) {
     ctx.save()
     ctx.beginPath()
     ctx.fillStyle = "white"
-    ctx.arc(x, y, 3, 0, Math.PI * 2, true)
+    ctx.arc(bug.x, bug.y, 3, 0, Math.PI * 2, true)
     ctx.fill()
     ctx.restore()
-    x = (x + .3) % 64
-    y = (y + .2) % 64
+  }
+
+  function tick() {
+    ctx.clearRect(0,0, w,h)
+    for (const i in swarm) {
+      draw(swarm[i])
+      move(swarm[i])
+    }
     requestAnimationFrame(tick)
   }
 }
