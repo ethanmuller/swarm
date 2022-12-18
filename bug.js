@@ -4,8 +4,8 @@ export class Bug {
     this.x = Math.random() * w
     this.y = Math.random() * h
     this.aligning = true
-    this.vx = (Math.random() * 2 - 1) * (this.aligning ? 5 : .3)
-    this.vy = (Math.random() * 2 - 1) * (this.aligning ? 5 : .3)
+    this.vx = 0
+    this.vy = 0
     this.ax = 0
     this.ay = 0
     this.maxForce = 0.01
@@ -21,7 +21,7 @@ export class Bug {
 
 
     if (this.aligning) {
-      this.align()
+      //this.align()
     }
 
     this.vx += this.ax
@@ -51,7 +51,7 @@ export class Bug {
       avgY = avgY / total
 
       // limit maginitude to maxForce
-      // const mag = Math.sqrt(avgX*avgX + avgY*avgY)
+      //const mag = Math.sqrt(avgX*avgX + avgY*avgY)
       // avgX = avgX * this.maxForce / mag
       // avgY = avgY * this.maxForce / mag
     }
@@ -78,7 +78,7 @@ export class Bug {
     window.ctx.save()
     window.ctx.beginPath()
     window.ctx.fillStyle = "white"
-    window.ctx.arc(this.x, this.y, 3, 0, Math.PI * 2, true)
+    window.ctx.arc(this.x, this.y, 6, 0, Math.PI * 2, true)
     window.ctx.fill()
     window.ctx.restore()
   }
