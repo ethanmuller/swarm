@@ -78,8 +78,13 @@ function print(msg) {
 }
 
 function handleMoveTouch(e) {
-  if (window.walkTouch !== e.changedTouches[0].identifier) {
-    return
+
+  let touch
+
+  for (let i = 0; i < e.touches.length; i++) {
+    if (e.touches[i].identifier === window.walkTouch) {
+      touch = e.touches[i]
+    }
   }
 
   const rect = e.target.getBoundingClientRect()
