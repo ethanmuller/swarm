@@ -48,29 +48,30 @@ body {
 #ui {
   display: flex;
   width: 100%;
-  touch-action: none;
 
   -webkit-user-select: none; /* Safari */
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none; /* Standard syntax */
 }
 
-#ui > * {
-  flex: 1;
+#ui > #stick {
+  flex: 2;
+  height: 40vw;
 }
 
-#movement {
+#ui > #touchpad {
+  flex: 3;
+}
+
+#stick {
   background: red;
-  height: 50vw;
 }
 
-#verbs {
+#touchpad {
   background: green;
-  height: 50vw;
 }
 
 #printer {
-  touch-action: none;
   background: blue;
   color: white;
   width: 100%;

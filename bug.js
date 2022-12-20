@@ -19,11 +19,6 @@ export class Bug {
     this.ax = 0
     this.ay = 0
 
-
-    if (this.aligning) {
-      //this.align()
-    }
-
     this.vx += this.ax
     this.vy += this.ay
 
