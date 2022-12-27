@@ -60,8 +60,8 @@ function handle_pinch_zoom(ev) {
 
       // This threshold is device dependent as well as application specific
       const PINCH_THRESHOLD = 1;
-      if (diff1 >= PINCH_THRESHOLD && diff2 >= PINCH_THRESHOLD)
-	ev.target.style.background = "green";
+      if (diff1 >= PINCH_THRESHOLD && diff2 >= PINCH_THRESHOLD) {
+      }
     } else {
       // empty tpCache
       window.tpCache = [];
@@ -88,6 +88,11 @@ function start_handler(ev) {
 
 function start_touchpad_handler(ev) {
  ev.preventDefault();
+ if (ev.targetTouches.length === 1) {
+   window.touchpadState.startTime = Date.now()
+   window.touchpadState.startX = ev.targetTouches[0].clientX
+   window.touchpadState.startY = ev.targetTouches[0].clientY
+ }
  if (ev.targetTouches.length === 2) {
    for (let i = 0; i < ev.targetTouches.length; i++) {
      window.tpCache.push(ev.targetTouches[i]);
@@ -191,21 +196,19 @@ function move_stick_handler(ev) {
  handle_pinch_zoom(ev);
 }
 
-function end_handler(ev) {
-  ev.preventDefault();
-  if (window.logEvents) log(ev.type, ev, false);
-  if (ev.targetTouches.length === 0) {
-    // Restore background and border to original values
-    ev.target.style.background = "";
-    ev.target.style.border = "1px solid black";
-  }
-}
-
 function end_touchpad_handler(ev) {
- ev.preventDefault();
+  const throwTimeThreshold = 250
+  const throwDistThreshold = 10
+  ev.preventDefault();
+
   if (window.logEvents) log(ev.type, ev, false);
-  if (ev.targetTouches.length === 0) {
-    // Restore background and border to original values
+  if (ev.targetTouches.length === 0 &&
+    ev.changedTouches.length === 1 &&
+    Date.now() - window.touchpadState.startTime < throwTimeThreshold &&
+    Math.abs(window.touchpadState.startX - ev.changedTouches[0].clientX) < throwDistThreshold &&
+    Math.abs(window.touchpadState.startY - ev.changedTouches[0].clientY) < throwDistThreshold) {
+    //throw()
+    log('throw')
   }
  update_touchpad(ev);
 }
