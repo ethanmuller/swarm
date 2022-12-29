@@ -1,12 +1,6 @@
-import p5 from 'p5'
 
-
-const maxDistance = 100
-const captRadius = 10
-
-export class Bug {
-  constructor(captain) {
-    this.location = new p5.Vector(40, 50)
+export class Captain {
+  constructor() {
     this.x = Math.random() * w
     this.y = Math.random() * h
     this.aligning = true
@@ -15,20 +9,20 @@ export class Bug {
     this.ax = 0
     this.ay = 0
     this.maxForce = 0.01
-    this.captain = captain
   }
 
   update() {
-    const diffX = this.captain.x - this.x
-    const diffY = this.captain.y - this.y
+    this.x += this.vx
+    this.y += this.vy
 
-    if (Math.abs(diffX) < maxDistance &&
-        Math.abs(diffX) > captRadius) {
-      this.vx = diffX * 0.02
-      this.vy = diffY * 0.02
-      this.x += this.vx
-      this.y += this.vy
-    }
+    // prevent accumulating acceleration
+    this.ax = 0
+    this.ay = 0
+
+    this.vx += this.ax
+    this.vy += this.ay
+
+    this.wrap()
   }
 
   align() {
@@ -78,8 +72,8 @@ export class Bug {
   show() {
     window.ctx.save()
     window.ctx.beginPath()
-    window.ctx.fillStyle = "red"
-    window.ctx.arc(this.x, this.y, 2, 0, Math.PI * 2, true)
+    window.ctx.fillStyle = "white"
+    window.ctx.arc(this.x, this.y, 6, 0, Math.PI * 2, true)
     window.ctx.fill()
     window.ctx.restore()
   }

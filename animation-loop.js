@@ -1,3 +1,4 @@
+import { Captain } from './captain.js'
 import { Bug } from './bug.js'
 import { Cursor } from './cursor.js'
 
@@ -280,9 +281,9 @@ function tickIndefinitely() {
 function tick() {
   window.ctx.clearRect(0,0, w,h)
 
-  for (let bug of swarm) {
-    bug.update()
-    bug.show()
+  for (let thing of everything) {
+    thing.update()
+    thing.show()
   }
 }
 
@@ -292,8 +293,9 @@ export function start(canvasEl) {
   window.w = canvasEl.width
   window.h = canvasEl.height
   window.ctx = canvasEl.getContext('2d');
-  window.swarm = []
-  window.captain = new Bug()
+  window.everything = []
+  window.captain = new Captain()
+  window.bug = new Bug(window.captain)
   window.cursor = new Cursor()
   window.tpCache = []
   window.touchpadState = { prev: {} }
@@ -301,8 +303,9 @@ export function start(canvasEl) {
   window.logEvents = false
   const printer = document.getElementById('printer')
 
-  swarm.push(window.captain)
-  swarm.push(window.cursor)
+  everything.push(window.captain)
+  everything.push(window.bug)
+  everything.push(window.cursor)
 
  set_stick_handlers("stick");
  set_touchpad_handlers("touchpad");
