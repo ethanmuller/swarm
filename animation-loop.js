@@ -1,3 +1,4 @@
+import p5 from 'p5'
 import { Captain } from './captain.js'
 import { Bug } from './bug.js'
 import { Cursor } from './cursor.js'
@@ -187,8 +188,9 @@ function move_stick_handler(ev) {
     const yNormalized = yOnEl / rect.height
     const y = yNormalized * 2 - 1
 
-    window.captain.vx = x * walkSpeed
-    window.captain.vy = y * walkSpeed
+    window.captain.velocity = new p5.Vector(x * walkSpeed, y * walkSpeed)
+    //window.captain.vx = x * walkSpeed
+    //window.captain.vy = y * walkSpeed
   }
 
    update_stick(ev);
@@ -199,7 +201,7 @@ function move_stick_handler(ev) {
 
 function end_touchpad_handler(ev) {
   const throwTimeThreshold = 250
-  const throwDistThreshold = 10
+  const throwDistThreshold = 30
   ev.preventDefault();
 
   if (window.logEvents) log(ev.type, ev, false);
@@ -209,7 +211,11 @@ function end_touchpad_handler(ev) {
     Math.abs(window.touchpadState.startX - ev.changedTouches[0].clientX) < throwDistThreshold &&
     Math.abs(window.touchpadState.startY - ev.changedTouches[0].clientY) < throwDistThreshold) {
     //throw()
-    log('throw')
+    //log('throw')
+    const dist = p5.Vector.dist(window.bug.location, window.captain.location)
+    if (dist > throwDistThreshold) return
+    window.bug.location = new p5.Vector(window.cursor.x, window.cursor.y).add(window.captain.location)
+    window.bug.velocity = new p5.Vector(0,0)
   }
  update_touchpad(ev);
 }
@@ -218,8 +224,9 @@ function end_stick_handler(ev) {
   ev.preventDefault();
   if (window.logEvents) log(ev.type, ev, false);
   if (ev.targetTouches.length === 0) {
-    window.captain.vx = 0
-    window.captain.vy = 0
+    window.captain.velocity = new p5.Vector(0, 0)
+    //window.captain.vx = 0
+    //window.captain.vy = 0
   }
 }
 
