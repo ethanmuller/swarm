@@ -26,7 +26,7 @@ export class Cursor {
     window.ctx.save()
     window.ctx.beginPath()
     window.ctx.strokeStyle = "#faa"
-    window.ctx.arc(window.captain.x + this.x, window.captain.y + this.y, 3.5, 0, Math.PI * 2, true)
+    window.ctx.arc(window.captain.location.x + this.x, window.captain.location.y + this.y, 3.5, 0, Math.PI * 2, true)
     window.ctx.stroke()
     window.ctx.restore()
   }

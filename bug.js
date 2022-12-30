@@ -1,13 +1,11 @@
 import p5 from 'p5'
-
-
 const maxDistance = 100
 
 export class Bug {
   constructor(captain) {
     this.location = new p5.Vector(40, 50)
     this.velocity = new p5.Vector(0, 0)
-    this.acceleration = new p5.Vector()
+    this.acceleration = new p5.Vector(0, 0)
     this.captain = captain
   }
 
