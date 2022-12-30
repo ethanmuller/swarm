@@ -8,6 +8,7 @@ export class Captain {
   }
 
   update() {
+    this.velocity.limit(1)
     this.location.add(this.velocity)
     this.wrap()
   }
