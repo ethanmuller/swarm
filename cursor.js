@@ -1,32 +1,19 @@
+import p5 from 'p5'
 
 export class Cursor {
   constructor() {
-    this.x = 0
-    this.y = 0
-    this.vx = 0
-    this.vy = 0
-    this.ax = 0
-    this.ay = 0
-    this.maxForce = 0.01
+    this.location = new p5.Vector(30, 0)
   }
 
   update() {
-    this.x += this.vx
-    this.y += this.vy
-
-    this.vx += this.ax
-    this.vy += this.ay
-
-    // prevent accumulating acceleration
-    this.ax = 0
-    this.ay = 0
+    this.location.limit(75)
   }
 
   show() {
     window.ctx.save()
     window.ctx.beginPath()
     window.ctx.strokeStyle = "#faa"
-    window.ctx.arc(window.captain.location.x + this.x, window.captain.location.y + this.y, 3.5, 0, Math.PI * 2, true)
+    window.ctx.arc(window.captain.location.x + this.location.x, window.captain.location.y + this.location.y, 3.5, 0, Math.PI * 2, true)
     window.ctx.stroke()
     window.ctx.restore()
   }

@@ -2,8 +2,8 @@ import p5 from 'p5'
 const maxDistance = 100
 
     const PERCEPTION_RADIUS = 60
-    const TOUCH_RADIUS = 30
-    const CAPTAIN_RADIUS = 20
+    const TOUCH_RADIUS = 20
+    const CAPTAIN_RADIUS = 15
 
 export class Bug {
   constructor(captain) {

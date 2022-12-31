@@ -160,8 +160,8 @@ function move_touchpad_handler(ev) {
       // Single tap
       const xDiff = ev.targetTouches[0].screenX - window.touchpadState.prev.targetTouches[0].screenX
       const yDiff = ev.targetTouches[0].screenY - window.touchpadState.prev.targetTouches[0].screenY
-      window.cursor.x += xDiff * cursorSpeed
-      window.cursor.y += yDiff * cursorSpeed
+      window.cursor.location.x += xDiff * cursorSpeed
+      window.cursor.location.y += yDiff * cursorSpeed
       break;
     case 2:
       // Two simultaneous touches
@@ -217,9 +217,9 @@ function end_touchpad_handler(ev) {
 
     window.bug.velocity = new p5.Vector(0,0)
     window.bug.a = window.bug.location.copy()
-    window.bug.b = new p5.Vector(window.captain.location.x + window.cursor.x, window.captain.location.y + window.cursor.y)
+    window.bug.b = new p5.Vector(window.captain.location.x + window.cursor.location.x, window.captain.location.y + window.cursor.location.y)
     window.bug.throwTime = Date.now()
-    window.bug.landTime = Date.now() + 250
+    window.bug.landTime = Date.now() + 500
     window.bug.mode = 2
   }
  update_touchpad(ev);
