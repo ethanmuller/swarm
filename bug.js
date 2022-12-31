@@ -2,7 +2,7 @@ import p5 from 'p5'
 const maxDistance = 100
 
     const PERCEPTION_RADIUS = 60
-    const TOUCH_RADIUS = 10
+    const TOUCH_RADIUS = 30
     const CAPTAIN_RADIUS = 20
 
 export class Bug {
@@ -38,6 +38,7 @@ export class Bug {
     const t = (Date.now() - this.throwTime) / (this.landTime - this.throwTime)
     if (t < 1) {
       this.location = p5.Vector.lerp(this.a, this.b, t)
+      this.location.y += Math.sin(Math.PI * t) * 30 * -1
     } else {
       this.mode = 0
     }
