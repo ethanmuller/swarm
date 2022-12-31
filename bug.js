@@ -4,10 +4,11 @@ const maxDistance = 100
     const PERCEPTION_RADIUS = 60
     const TOUCH_RADIUS = 20
     const CAPTAIN_RADIUS = 15
+    const BUG_RADIUS = 15
 
 export class Bug {
   constructor(captain) {
-    this.location = new p5.Vector(w/2+10, h/2+10)
+    this.location = new p5.Vector(w*Math.random(), h*Math.random())
     this.velocity = new p5.Vector(0, 0)
     this.acceleration = new p5.Vector(0, 0)
     this.captain = captain
@@ -25,6 +26,7 @@ export class Bug {
         break;
       case 1:
         this.follow()
+        this.avoid()
         break;
       case 2:
         this.fly()
@@ -32,6 +34,29 @@ export class Bug {
     }
     this.location.add(this.velocity)
     //this.wrap()
+  }
+
+  avoid() {
+    // look at all other bugs and move in the opposite direction
+    let closestBug
+    let closestDist = Infinity
+
+    for (let i = 0; i < bugs.length; i++) {
+      if (bugs[i] === this) continue
+      const dist = p5.Vector.dist(this.location, bugs[i].location)
+      if (dist < closestDist) {
+        closestBug = bugs[i]
+        closestDist = dist
+      }
+    }
+
+    if (closestDist < BUG_RADIUS) {
+      const diff = closestBug.location.copy()
+      diff.sub(this.location)
+      diff.mult(-1)
+      diff.limit(0.1)
+      this.velocity.add(diff)
+    }
   }
 
   fly() {
@@ -60,7 +85,7 @@ export class Bug {
     if (dist < PERCEPTION_RADIUS && dist > CAPTAIN_RADIUS) {
       const diff = this.captain.location.copy()
       diff.sub(this.location)
-      diff.setMag(0.5)
+      diff.setMag(0.7)
       this.velocity = diff
     } else {
       this.velocity.mult(0.9)

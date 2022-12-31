@@ -199,9 +199,25 @@ function move_stick_handler(ev) {
  handle_pinch_zoom(ev);
 }
 
+function getClosestBug() {
+  let bug
+  let closestDist = Infinity
+
+  for (let i = 0; i < bugs.length; i++) {
+    const dist = p5.Vector.dist(bugs[i].location, window.captain.location)
+
+    if (dist < closestDist) {
+      closestDist = dist
+      bug = bugs[i]
+    }
+  }
+
+  return bug
+}
+
 function end_touchpad_handler(ev) {
   const throwTimeThreshold = 250
-  const throwDistThreshold = 30
+  const throwDistThreshold = 15
   ev.preventDefault();
 
   if (window.logEvents) log(ev.type, ev, false);
@@ -210,17 +226,19 @@ function end_touchpad_handler(ev) {
     Date.now() - window.touchpadState.startTime < throwTimeThreshold &&
     Math.abs(window.touchpadState.startX - ev.changedTouches[0].clientX) < throwDistThreshold &&
     Math.abs(window.touchpadState.startY - ev.changedTouches[0].clientY) < throwDistThreshold) {
-    //throw()
-    //log('throw')
-    const dist = p5.Vector.dist(window.bug.location, window.captain.location)
+
+    const bug = getClosestBug()
+
+    const dist = p5.Vector.dist(bug.location, window.captain.location)
+
     if (dist > throwDistThreshold) return
 
-    window.bug.velocity = new p5.Vector(0,0)
-    window.bug.a = window.bug.location.copy()
-    window.bug.b = new p5.Vector(window.captain.location.x + window.cursor.location.x, window.captain.location.y + window.cursor.location.y)
-    window.bug.throwTime = Date.now()
-    window.bug.landTime = Date.now() + 500
-    window.bug.mode = 2
+    bug.velocity = new p5.Vector(0,0)
+    bug.a = bug.location.copy()
+    bug.b = new p5.Vector(window.captain.location.x + window.cursor.location.x, window.captain.location.y + window.cursor.location.y)
+    bug.throwTime = Date.now()
+    bug.landTime = Date.now() + 500
+    bug.mode = 2
   }
  update_touchpad(ev);
 }
@@ -305,9 +323,16 @@ export function start(canvasEl) {
   window.w = canvasEl.width
   window.h = canvasEl.height
   window.ctx = canvasEl.getContext('2d');
+  window.bugs = []
   window.everything = []
   window.captain = new Captain()
-  window.bug = new Bug(window.captain)
+
+  for (let i = 0; i <= 30; i++) {
+    const newBug = new Bug(window.captain)
+    window.everything.push(newBug)
+    window.bugs.push(newBug)
+  }
+
   window.cursor = new Cursor()
   window.tpCache = []
   window.touchpadState = { prev: {} }
@@ -315,9 +340,11 @@ export function start(canvasEl) {
   window.logEvents = false
   const printer = document.getElementById('printer')
 
-  everything.push(window.captain)
-  everything.push(window.bug)
-  everything.push(window.cursor)
+  window.everything.push(window.captain)
+
+
+  window.everything.push(window.cursor)
+
 
  set_stick_handlers("stick");
  set_touchpad_handlers("touchpad");
