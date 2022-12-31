@@ -214,8 +214,13 @@ function end_touchpad_handler(ev) {
     //log('throw')
     const dist = p5.Vector.dist(window.bug.location, window.captain.location)
     if (dist > throwDistThreshold) return
-    window.bug.location = new p5.Vector(window.cursor.x, window.cursor.y).add(window.captain.location)
+
     window.bug.velocity = new p5.Vector(0,0)
+    window.bug.a = window.bug.location.copy()
+    window.bug.b = new p5.Vector(window.captain.location.x + window.cursor.x, window.captain.location.y + window.cursor.y)
+    window.bug.throwTime = Date.now()
+    window.bug.landTime = Date.now() + 250
+    window.bug.mode = 2
   }
  update_touchpad(ev);
 }
